@@ -110,6 +110,7 @@ input[type="date"] {
 	display: flex;
 	flex-direction: column;
 	row-gap: 10px;
+	width: 100%;
 	width: calc(100% / 5);
 	cursor: pointer;
 	text-align: center;
