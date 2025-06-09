@@ -4,6 +4,7 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="./style.css" />
+		<link rel="stylesheet" href="./dropStyle.css" />
 		<script
 			defer
 			src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
@@ -12,20 +13,38 @@
 			defer
 			src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
 		></script>
+		<script defer src="./dropScript.js"></script>
 		<script defer src="./script.js"></script>
 		<title>Générer Planning</title>
 	</head>
 	<body>
-		<div class="form-control">
-			<label for="">Planning(excel):</label>
-			<input type="file" name="" id="" />
+		<div id="form-container">
+			<h1>Générateur de plannings</h1>
+			<form id="form" action="index.html">
+				<label for="planning" class="drop-container" id="dropcontainer">
+					<span class="drop-title">Déposer votre fichier</span>
+					ou
+					<input
+						type="file"
+						id="planning"
+						accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+						required
+					/>
+				</label>
+
+				<div class="form-control">
+					<div id="classes-container"></div>
+				</div>
+
+				<div class="form-control">
+					<label for="">Date du lundi pour débuter le planning</label>
+					<input type="date" value="2025-10-06" />
+				</div>
+				<button class="btn btn-primary" type="submit">
+					Télécharger le(s) PDF
+				</button>
+			</form>
 		</div>
-		<form action="index.html">
-			<div id="classes-container"></div>
-			<label for="">Date du lundi pour débuter le planning</label>
-			<input type="date" value="2025-10-06" />
-			<button type="submit">Télécharger le(s) PDF</button>
-		</form>
 		<div id="planning">
 			<div id="header-container"></div>
 			<table>

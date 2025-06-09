@@ -204,6 +204,14 @@ const loadInter = (json) => {
 // Génère les PDF après avoir sélectionné les classes et la date
 async function generatePDF(e) {
 	e.preventDefault();
+	const selectedDate = new Date(dateInput.value);
+	// Vérifie si le jour est un lundi (1 = lundi)
+	if (selectedDate.getDay() !== 1) {
+		alert("Veuillez choisir un lundi.");
+		dateInput.value = ""; // Réinitialise la valeur si ce n’est pas un lundi
+		return;
+	}
+
 	const classesInput = document.querySelectorAll("input[name='classes[]'");
 
 	let j = 2;
@@ -341,5 +349,13 @@ async function generatePDF(e) {
 	reader.readAsArrayBuffer(uploadedFile);
 }
 
+dateInput.addEventListener("input", () => {
+	const selectedDate = new Date(dateInput.value);
+	// Vérifie si le jour est un lundi (1 = lundi)
+	if (selectedDate.getDay() !== 1) {
+		alert("Veuillez choisir un lundi.");
+		dateInput.value = ""; // Réinitialise la valeur si ce n’est pas un lundi
+	}
+});
 // Clique sur le bouton = génération du planning PDF
 button.addEventListener("click", (e) => generatePDF(e));

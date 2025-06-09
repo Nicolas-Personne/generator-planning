@@ -1,0 +1,85 @@
+.drop-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	height: 200px;
+	padding: 20px;
+	border: 2px dashed #222245;
+	color: #222245;
+	cursor: pointer;
+	transition: background 0.2s ease-in-out, border 0.2s ease-in-out;
+	margin: 20px 0;
+}
+
+.drop-container:hover {
+	background-color: #eee;
+}
+
+.drop-title {
+	color: #222245;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+}
+
+input[type="file"] {
+	width: 350px;
+	max-width: 100%;
+	color: #222245;
+	padding: 8px;
+	background-color: #fff;
+	border: 1px solid #222245;
+}
+
+input[type="file"]:focus {
+	outline: 2px dashed #222245;
+	outline-offset: 2px;
+}
+
+input[type="file"]::file-selector-button {
+	margin-right: 8px;
+	border: none;
+	background-color: #222245;
+	padding: 8px 12px;
+	color: #fff;
+	cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+	background-color: #4747b8;
+}
+
+.drop-container {
+	border-color: #35356e;
+	color: #fff;
+}
+
+.drop-container:hover {
+	background-color: #282853;
+}
+
+.drop-title {
+	color: #fff;
+}
+
+input[type="file"] {
+	color: #fff;
+	border: 1px solid #35356e;
+	background-color: #1e1e3f;
+}
+
+input[type="file"]:focus {
+	outline: 2px dashed #7c7cc0;
+	outline-offset: 2px;
+}
+
+input[type="file"]::file-selector-button {
+	background-color: #35356e;
+	color: #fff;
+}
+
+.drop-container.drag-active {
+	background-color: #282853;
+}
