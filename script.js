@@ -30,8 +30,7 @@ const months = [
 ];
 const days = ["LUN", "MAR", "MER", "JEU", "VEN"];
 
-// Lorsqu’un fichier est chargé
-file.addEventListener("change", (e) => {
+function loadedFile() {
 	const uploadedFile = file.files[0];
 	const reader = new FileReader();
 
@@ -54,6 +53,7 @@ file.addEventListener("change", (e) => {
 		// Crée dynamiquement les checkbox pour chaque classe
 		classes.map((item) => {
 			const div = document.createElement("div");
+
 			const input = document.createElement("input");
 			input.type = "checkbox";
 			input.name = "classes[]";
@@ -61,16 +61,20 @@ file.addEventListener("change", (e) => {
 			input.id = item;
 
 			const label = document.createElement("label");
+			label.classList.add("box-checkbox");
 			label.innerText = item;
 			label.htmlFor = item;
 
-			div.appendChild(input);
-			div.appendChild(label);
-			classesContainer.appendChild(div);
+			label.appendChild(input);
+			classesContainer.appendChild(label);
 		});
 	};
 
 	reader.readAsArrayBuffer(uploadedFile);
+}
+// Lorsqu’un fichier est chargé
+file.addEventListener("change", (e) => {
+	loadedFile();
 });
 
 // Convertisseur de date Excel → JS

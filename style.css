@@ -66,7 +66,7 @@ div#form-container {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	height: 100vh;
+	min-height: 100vh;
 	background-color: #1e1e3f;
 }
 
@@ -94,4 +94,27 @@ input[type="date"] {
 	border: 1px solid #35356e;
 	background-color: #1e1e3f;
 	color-scheme: dark;
+}
+#classes-container {
+	display: flex;
+	flex-wrap: wrap;
+	row-gap: 10px;
+	column-gap: 10px;
+	justify-content: center;
+	margin-bottom: 10px;
+}
+.box-checkbox {
+	background-color: #222245;
+	border: 2px dashed #222245;
+	padding: 10px;
+	display: flex;
+	flex-direction: column;
+	row-gap: 10px;
+	width: calc(100% / 5);
+	cursor: pointer;
+	text-align: center;
+}
+.box-checkbox:hover,
+.box-checkbox:has(> input:checked) {
+	background-color: #35356e;
 }

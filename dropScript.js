@@ -22,4 +22,5 @@ dropContainer.addEventListener("drop", (e) => {
 	e.preventDefault();
 	dropContainer.classList.remove("drag-active");
 	fileInput.files = e.dataTransfer.files;
+	loadedFile();
 });
