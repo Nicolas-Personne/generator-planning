@@ -52,8 +52,6 @@ function loadedFile() {
 
 		// Crée dynamiquement les checkbox pour chaque classe
 		classes.map((item) => {
-			const div = document.createElement("div");
-
 			const input = document.createElement("input");
 			input.type = "checkbox";
 			input.name = "classes[]";
@@ -140,13 +138,14 @@ async function fillPlanning(fullDataArray, startDate, endDate, classe) {
 	// Génère et télécharge le PDF
 	await html2pdf()
 		.set({
-			margin: 0.5,
+			margin: 1,
 			filename: `[${classe}]Planning du ${startDate} au ${endDate}.pdf`,
-			image: { type: "jpeg", quality: 0.98 },
+			image: { type: "pdf", quality: 0.98 },
 			html2canvas: { scale: 2 },
-			jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
+			jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
 		})
 		.from(planningContainer)
+		// .toCanvas()
 		.save();
 
 	// Nettoyage du DOM

@@ -1,5 +1,5 @@
 const dropContainer = document.getElementById("dropcontainer");
-const fileInput = document.getElementById("planning");
+const fileInput = document.getElementById("toto-planning");
 
 dropContainer.addEventListener(
 	"dragover",

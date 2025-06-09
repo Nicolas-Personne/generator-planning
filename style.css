@@ -4,15 +4,24 @@ body {
 	margin: 0;
 	color: #fff;
 }
+#planning {
+	color: #35356e;
+	width: 90%;
+	max-width: 100%;
+	overflow: hidden;
+	box-sizing: border-box;
+	margin: 0 auto;
+}
+
 #header {
 	display: flex;
-	width: 80%;
+	width: 90%;
 	justify-content: space-between;
 	margin: 0 auto;
 }
 #header img {
-	width: 20%;
-	object-fit: contain;
+	width: 40%;
+	/* object-fit: cover; */
 }
 table {
 	border: 1px solid black;
@@ -57,7 +66,7 @@ td {
 }
 
 form#form {
-	width: 30%;
+	width: 50%;
 }
 
 div#form-container {
@@ -118,4 +127,8 @@ input[type="date"] {
 .box-checkbox:hover,
 .box-checkbox:has(> input:checked) {
 	background-color: #35356e;
+}
+
+.box-checkbox input {
+	cursor: pointer;
 }
