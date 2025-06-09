@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="./style.css" />
+		<script
+			defer
+			src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+		></script>
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"
+		></script>
+		<script defer src="./script.js"></script>
+		<title>Générer Planning</title>
+	</head>
+	<body>
+		<div class="form-control">
+			<label for="">Planning(excel):</label>
+			<input type="file" name="" id="" />
+		</div>
+		<form action="index.html">
+			<div id="classes-container"></div>
+			<label for="">Date du lundi pour débuter le planning</label>
+			<input type="date" value="2025-10-06" />
+			<button type="submit">Télécharger le(s) PDF</button>
+		</form>
+		<div id="planning">
+			<div id="header-container"></div>
+			<table>
+				<tbody></tbody>
+			</table>
+		</div>
+	</body>
+</html>
