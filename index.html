@@ -21,24 +21,23 @@
 		<div id="form-container">
 			<h1>Générateur de plannings</h1>
 			<form id="form" action="index.html">
+				<div class="form-control">
+					<label for="">Date du lundi pour débuter le planning</label>
+					<input type="date" value="2025-10-06" />
+				</div>
 				<label for="toto-planning" class="drop-container" id="dropcontainer">
 					<span class="drop-title">Déposer votre fichier</span>
 					ou
 					<input
 						type="file"
 						id="toto-planning"
-						accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+						accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.ms-excel.addin.macroEnabled.12"
 						required
 					/>
 				</label>
-
+				<span class="file-error"></span>
 				<div class="form-control">
 					<div id="classes-container"></div>
-				</div>
-
-				<div class="form-control">
-					<label for="">Date du lundi pour débuter le planning</label>
-					<input type="date" value="2025-10-06" />
 				</div>
 				<button class="btn btn-primary" type="submit">
 					Télécharger le(s) PDF

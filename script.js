@@ -6,9 +6,11 @@ const dateInput = document.querySelector("input[type='date']");
 const planningContainer = document.querySelector("#planning");
 const headerPlanningContainer = document.querySelector("#header-container");
 const tBodyContainer = document.querySelector("tbody");
+let fileError = document.querySelector(".file-error");
+const formContainer = document.querySelector("#form-container");
 
 // Variables de travail
-const classes = []; // stocke les classes récupérées depuis la feuille "Data"
+let classes = []; // stocke les classes récupérées depuis la feuille "Data"
 const includedClasses = []; // stocke les classes sélectionnées par l'utilisateur
 let intervenantsArray = {}; // dictionnaire des enseignants
 let subjectArray = {}; // dictionnaire des matières
@@ -32,39 +34,49 @@ const days = ["LUN", "MAR", "MER", "JEU", "VEN"];
 
 function loadedFile() {
 	const uploadedFile = file.files[0];
+
+	classesContainer.innerHTML = "";
+	classes = [];
 	const reader = new FileReader();
 
 	reader.onload = function (e) {
 		const data = new Uint8Array(e.target.result);
 		const workbook = XLSX.read(data, { type: "array" });
+		// Vérifie que la feuille "Data" existe
+		if (!workbook.SheetNames.includes("Data")) {
+			fileError.innerText = "Oulah !!! L'onglet 'Data' est introuvable.";
+			return;
+		}
+		const worksheet = workbook.Sheets["Data"];
+		const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 0 });
+		if (jsonData.length === 0 || !jsonData[0].hasOwnProperty("Couleurs")) {
+			fileError.innerText =
+				"Oulah !!! Ce n'est pas le bon fichier a première vu.";
+			return;
+		}
 
-		workbook.SheetNames.map((sheet) => {
-			if (sheet === "Data") {
-				const worksheet = workbook.Sheets[sheet];
-				const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 0 });
-
-				// Récupère la couleur (classe) pour les checkbox
-				jsonData.map((item) => {
-					if (item.Couleurs) classes.push(item.Couleurs);
-				});
-			}
+		// Si tout est bon, on peut traiter les données
+		jsonData.forEach((item) => {
+			classes.push(item.Couleurs);
 		});
 
 		// Crée dynamiquement les checkbox pour chaque classe
 		classes.map((item) => {
-			const input = document.createElement("input");
-			input.type = "checkbox";
-			input.name = "classes[]";
-			input.value = item;
-			input.id = item;
+			if (item) {
+				const input = document.createElement("input");
+				input.type = "checkbox";
+				input.name = "classes[]";
+				input.value = item;
+				input.id = item;
 
-			const label = document.createElement("label");
-			label.classList.add("box-checkbox");
-			label.innerText = item;
-			label.htmlFor = item;
+				const label = document.createElement("label");
+				label.classList.add("box-checkbox");
+				label.innerText = item;
+				label.htmlFor = item;
 
-			label.appendChild(input);
-			classesContainer.appendChild(label);
+				label.appendChild(input);
+				classesContainer.appendChild(label);
+			}
 		});
 	};
 
@@ -91,6 +103,8 @@ function dateToExcelSerial(date) {
 
 // Remplit le planning HTML et le convertit en PDF
 async function fillPlanning(fullDataArray, startDate, endDate, classe) {
+	formContainer.style.display = "none";
+	planningContainer.style.display = "block";
 	headerPlanningContainer.innerHTML = `
     <div id="header">
       <img src="./logo.png" alt="" />
@@ -120,13 +134,13 @@ async function fillPlanning(fullDataArray, startDate, endDate, classe) {
       </tr>
       <tr>
         <td class="side">Enseignant</td>
-        <td class="content">${fullDataArray[key].enseignantAm ?? ""}</td>
-        <td class="content">${fullDataArray[key].enseignantPm ?? ""}</td>
+        <td class="content">${fullDataArray[key].enseignantAm ?? "-"}</td>
+        <td class="content">${fullDataArray[key].enseignantPm ?? "-"}</td>
       </tr>
       <tr>
         <td class="side">Matière</td>
-        <td class="content">${fullDataArray[key].matiereAm ?? ""}</td>
-        <td class="content">${fullDataArray[key].matierePm ?? ""}</td>
+        <td class="content">${fullDataArray[key].matiereAm ?? "-"}</td>
+        <td class="content">${fullDataArray[key].matierePm ?? "-"}</td>
       </tr>
     `;
 		k++;
@@ -151,6 +165,8 @@ async function fillPlanning(fullDataArray, startDate, endDate, classe) {
 	// Nettoyage du DOM
 	headerPlanningContainer.innerHTML = "";
 	tBodyContainer.innerHTML = "";
+	planningContainer.style.display = "none";
+	formContainer.style.display = "flex";
 }
 
 // Réorganise une feuille Excel transposée pour les intervenants
@@ -231,6 +247,7 @@ async function generatePDF(e) {
 		alert("Ajouter votre planning excel (VERSION 2025)");
 		return;
 	}
+
 	const reader = new FileReader();
 	reader.onload = async function (e) {
 		const data = new Uint8Array(e.target.result);
