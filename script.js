@@ -208,6 +208,7 @@ const loadInter = (json) => {
 async function generatePDF(e) {
 	e.preventDefault();
 	const selectedDate = new Date(dateInput.value);
+
 	// Vérifie si le jour est un lundi (1 = lundi)
 	if (selectedDate.getDay() !== 1) {
 		alert("Veuillez choisir un lundi.");
@@ -226,8 +227,11 @@ async function generatePDF(e) {
 	}
 
 	const uploadedFile = file.files[0];
+	if (!uploadedFile) {
+		alert("Ajouter votre planning excel (VERSION 2025)");
+		return;
+	}
 	const reader = new FileReader();
-
 	reader.onload = async function (e) {
 		const data = new Uint8Array(e.target.result);
 		const workbook = XLSX.read(data, { type: "array" });
@@ -352,7 +356,7 @@ async function generatePDF(e) {
 	reader.readAsArrayBuffer(uploadedFile);
 }
 
-dateInput.addEventListener("input", () => {
+dateInput.addEventListener("blur", () => {
 	const selectedDate = new Date(dateInput.value);
 	// Vérifie si le jour est un lundi (1 = lundi)
 	if (selectedDate.getDay() !== 1) {
