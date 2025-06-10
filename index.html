@@ -24,6 +24,7 @@
 				<div class="form-control">
 					<label for="">Date du lundi pour débuter le planning</label>
 					<input type="date" value="2025-10-06" />
+					<small class="error date-error"></small>
 				</div>
 				<label for="toto-planning" class="drop-container" id="dropcontainer">
 					<span class="drop-title">Déposer votre fichier</span>
@@ -34,10 +35,11 @@
 						accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.ms-excel.addin.macroEnabled.12"
 						required
 					/>
+					<small class="error file-error"></small>
 				</label>
-				<span class="file-error"></span>
 				<div class="form-control">
 					<div id="classes-container"></div>
+					<small class="error classes-error"></small>
 				</div>
 				<button class="btn btn-primary" type="submit">
 					Télécharger le(s) PDF

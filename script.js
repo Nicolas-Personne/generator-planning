@@ -8,7 +8,8 @@ const headerPlanningContainer = document.querySelector("#header-container");
 const tBodyContainer = document.querySelector("tbody");
 let fileError = document.querySelector(".file-error");
 const formContainer = document.querySelector("#form-container");
-
+const classesError = document.querySelector(".classes-error");
+const dateError = document.querySelector(".date-error");
 // Variables de travail
 let classes = []; // stocke les classes récupérées depuis la feuille "Data"
 const includedClasses = []; // stocke les classes sélectionnées par l'utilisateur
@@ -44,14 +45,15 @@ function loadedFile() {
 		const workbook = XLSX.read(data, { type: "array" });
 		// Vérifie que la feuille "Data" existe
 		if (!workbook.SheetNames.includes("Data")) {
-			fileError.innerText = "Oulah !!! L'onglet 'Data' est introuvable.";
+			fileError.innerText =
+				"Oulah !!! L'onglet 'Data' est introuvable. Est-ce le bon fichier ?";
 			return;
 		}
 		const worksheet = workbook.Sheets["Data"];
 		const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 0 });
 		if (jsonData.length === 0 || !jsonData[0].hasOwnProperty("Couleurs")) {
 			fileError.innerText =
-				"Oulah !!! Ce n'est pas le bon fichier a première vu.";
+				"Oulah !!! Ce n'est pas le bon fichier à première vu.";
 			return;
 		}
 
@@ -173,7 +175,6 @@ async function fillPlanning(fullDataArray, startDate, endDate, classe) {
 function transposeSheet(data) {
 	const result = {};
 	const headers = data[0];
-
 	headers.forEach((header, colIndex) => {
 		if (header === "Intervenants Interne") {
 			result[`${header}-lastname`] = data.slice(1).map((row) => row[colIndex]);
@@ -199,6 +200,7 @@ const loadSubject = (json) => {
 			result[item[1]] = item[2];
 		}
 	});
+
 	return result;
 };
 
@@ -227,7 +229,7 @@ async function generatePDF(e) {
 
 	// Vérifie si le jour est un lundi (1 = lundi)
 	if (selectedDate.getDay() !== 1) {
-		alert("Veuillez choisir un lundi.");
+		dateError.innerText = "Il faut choisir un lundi";
 		dateInput.value = ""; // Réinitialise la valeur si ce n’est pas un lundi
 		return;
 	}
@@ -241,10 +243,15 @@ async function generatePDF(e) {
 		}
 		j += 5;
 	}
+	console.log(includedClasses);
 
+	if (includedClasses.length === 0) {
+		classesError.innerText = "Il faut au moins sélectionner une classe";
+		return;
+	}
 	const uploadedFile = file.files[0];
 	if (!uploadedFile) {
-		alert("Ajouter votre planning excel (VERSION 2025)");
+		fileError.innerText = "Ajouter votre planning excel (VERSION 2025)";
 		return;
 	}
 
@@ -252,8 +259,12 @@ async function generatePDF(e) {
 	reader.onload = async function (e) {
 		const data = new Uint8Array(e.target.result);
 		const workbook = XLSX.read(data, { type: "array" });
-
 		// Chargement des matières
+
+		if (!workbook.SheetNames.includes("Planning_2025_2026")) {
+			fileError.innerText = "Il manque la feuille 'Planning_2025_2026";
+			return;
+		}
 		workbook.SheetNames.map((sheet) => {
 			includedClasses.map((item) => {
 				const sheetName = `P_${item.classe.split(" ")[0]}${
@@ -277,7 +288,6 @@ async function generatePDF(e) {
 				const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 				loadInter(jsonData);
 			}
-
 			if (sheet === "Planning_2025_2026") {
 				const worksheet = workbook.Sheets[sheet];
 				const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
@@ -377,8 +387,10 @@ dateInput.addEventListener("blur", () => {
 	const selectedDate = new Date(dateInput.value);
 	// Vérifie si le jour est un lundi (1 = lundi)
 	if (selectedDate.getDay() !== 1) {
-		alert("Veuillez choisir un lundi.");
+		dateError.innerText = "Il faut choisir un lundi";
 		dateInput.value = ""; // Réinitialise la valeur si ce n’est pas un lundi
+	} else {
+		dateError.innerText = "";
 	}
 });
 // Clique sur le bouton = génération du planning PDF
