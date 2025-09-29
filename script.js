@@ -32,7 +32,11 @@ const months = [
 	"dec",
 ];
 const days = ["LUN", "MAR", "MER", "JEU", "VEN"];
-
+let date = new Date();
+let inputDate = `${date.getFullYear()}-${
+	date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1
+}-${date.getDate()}`;
+dateInput.value = inputDate;
 function loadedFile() {
 	const uploadedFile = file.files[0];
 
