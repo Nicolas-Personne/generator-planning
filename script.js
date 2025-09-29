@@ -32,6 +32,33 @@ const months = [
 	"dec",
 ];
 const days = ["LUN", "MAR", "MER", "JEU", "VEN"];
+function resetAll() {
+	// Réinitialise les inputs
+	file.value = "";
+	dateInput.value = "";
+
+	// Réinitialise les checkboxes
+	const classesInput = document.querySelectorAll("input[name='classes[]']");
+	classesInput.forEach((input) => (input.checked = false));
+
+	// Réinitialise les tableaux de travail
+	classes = [];
+	includedClasses.length = 0; // vider le tableau sans recréer la référence
+	intervenantsArray = {};
+	subjectArray = {};
+
+	// Réinitialise les messages d'erreur
+	fileError.innerText = "";
+	classesError.innerText = "";
+	dateError.innerText = "";
+
+	// Réinitialise le DOM
+	classesContainer.innerHTML = "";
+	headerPlanningContainer.innerHTML = "";
+	tBodyContainer.innerHTML = "";
+	planningContainer.style.display = "none";
+	formContainer.style.display = "flex";
+}
 
 function loadedFile() {
 	const uploadedFile = file.files[0];
@@ -61,7 +88,6 @@ function loadedFile() {
 		jsonData.forEach((item) => {
 			classes.push(item.Couleurs);
 		});
-
 		// Crée dynamiquement les checkbox pour chaque classe
 		classes.map((item) => {
 			if (item) {
@@ -109,7 +135,7 @@ async function fillPlanning(fullDataArray, startDate, endDate, classe) {
 	planningContainer.style.display = "block";
 	headerPlanningContainer.innerHTML = `
     <div id="header">
-      <img src="./logo.png" alt="" />
+      <img src="./logo.svg" alt="" />
       <h1>${classe}</h1>
     </div>
     <h2>
@@ -118,6 +144,7 @@ async function fillPlanning(fullDataArray, startDate, endDate, classe) {
     </h2>`;
 
 	let k = 0;
+
 	for (key in fullDataArray) {
 		tBodyContainer.innerHTML += `
       <tr>
@@ -176,6 +203,7 @@ function transposeSheet(data) {
 	const result = {};
 	const headers = data[0];
 	headers.forEach((header, colIndex) => {
+		data.slice(1).map((row) => {});
 		if (header === "Intervenants Interne") {
 			result[`${header}-lastname`] = data.slice(1).map((row) => row[colIndex]);
 			result[`${header}-firstname`] = data
@@ -213,7 +241,7 @@ const loadInter = (json) => {
 			intervenantsArray = {
 				...intervenantsArray,
 				[item]:
-					(sheetInter["Intervenants Interne-firstname"][index] ?? "Autonomie") +
+					(sheetInter["Intervenants Interne-firstname"][index] ?? "") +
 					" " +
 					(sheetInter["Intervenants Interne-lastname"][index]?.toUpperCase() ??
 						""),
@@ -243,7 +271,6 @@ async function generatePDF(e) {
 		}
 		j += 5;
 	}
-	console.log(includedClasses);
 
 	if (includedClasses.length === 0) {
 		classesError.innerText = "Il faut au moins sélectionner une classe";
@@ -302,16 +329,30 @@ async function generatePDF(e) {
 				jsonData.map(async (item, index) => {
 					let indexOfDate = item.indexOf(choosenSerial);
 					if (indexOfDate !== -1) {
-						let indexOfRow = index;
-
 						includedClasses.map((classe) => {
+							console.log("Démarrage : ", classe.classe);
+							let indexOfRow = index;
+							indexOfDate = item.indexOf(choosenSerial);
+							let j = 0;
+							let monthHasChanged = 0;
+							let tempFlag = false;
+							let monthAdd = 0;
 							for (let i = 0; i < 5; i++) {
 								let newDate = new Date(choosenDate.getTime() + i * 86400000);
 								let changingMonth =
-									newDate.getMonth() !== choosenDate.getMonth();
+									newDate.getMonth() !== choosenDate.getMonth() + monthAdd;
+
 								if (changingMonth) {
 									indexOfRow += 63;
 									indexOfDate = 1;
+									monthHasChanged++;
+									monthAdd++;
+									tempFlag = true;
+								}
+								console.log(indexOfRow);
+								if (tempFlag && monthHasChanged === 1) {
+									j = 0;
+									tempFlag = false;
 								}
 
 								// Formatage des dates
@@ -340,32 +381,33 @@ async function generatePDF(e) {
 										enseignantAm:
 											intervenantsArray[
 												jsonData[indexOfRow + classe.interval]?.[
-													indexOfDate + i
-												]
-											],
-										enseignantPm:
-											intervenantsArray[
-												jsonData[indexOfRow + classe.interval + 3]?.[
-													indexOfDate + i
+													indexOfDate + j
 												]
 											],
 										matiereAm:
 											subjectArray[classe.classe]?.[
 												jsonData[indexOfRow + classe.interval + 1]?.[
-													indexOfDate + i
+													indexOfDate + j
 												]
 											],
 										matierePm:
 											subjectArray[classe.classe]?.[
 												jsonData[indexOfRow + classe.interval + 2]?.[
-													indexOfDate + i
+													indexOfDate + j
+												]
+											],
+										enseignantPm:
+											intervenantsArray[
+												jsonData[indexOfRow + classe.interval + 3]?.[
+													indexOfDate + j
 												]
 											],
 									},
 								};
+								j++;
 							}
 						});
-
+						console.log(fullDataArray);
 						// Génère un PDF par classe
 						for (const classe in fullDataArray) {
 							await fillPlanning(
@@ -380,6 +422,7 @@ async function generatePDF(e) {
 			}
 		});
 	};
+
 	reader.readAsArrayBuffer(uploadedFile);
 }
 

@@ -1,17 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap");
+
 body {
 	box-sizing: border-box;
 	padding: 0;
 	margin: 0;
 	color: #fff;
+	font-family: "Manrope", sans-serif;
 }
 #planning {
-	color: #35356e;
+	color: #1c4e6d;
 	width: 90%;
 	max-width: 100%;
 	overflow: hidden;
 	box-sizing: border-box;
 	margin: 0 auto;
 	display: none;
+	display: block;
 }
 
 #header {
@@ -21,7 +25,7 @@ body {
 	margin: 0 auto;
 }
 #header img {
-	width: 40%;
+	width: 30%;
 	/* object-fit: cover; */
 }
 table {
@@ -33,15 +37,16 @@ table {
 td {
 	border: 1px solid black;
 	padding: 5px;
+	color: #1c4e6d;
 }
 .head-row {
-	background-color: #35356e;
+	background-color: #1c4e6d;
 	color: #fff;
 	font-weight: 600;
 	text-align: center;
 }
 #day {
-	color: #35356e;
+	color: #1c4e6d;
 	text-align: center;
 	font-weight: 600;
 	width: 5%;
@@ -52,7 +57,7 @@ td {
 	text-align: center;
 }
 .side {
-	background-color: #4747b8;
+	background-color: #005488;
 	color: #fff;
 	font-weight: 600;
 	text-align: center;
@@ -91,7 +96,7 @@ button.btn {
 }
 
 button.btn.btn-primary {
-	background-color: #35356e;
+	background-color: #1c4e6d;
 	color: #fff;
 }
 button.btn.btn-primary:hover {
@@ -101,7 +106,7 @@ button.btn.btn-primary:hover {
 
 input[type="date"] {
 	color: #fff;
-	border: 1px solid #35356e;
+	border: 1px solid #1c4e6d;
 	background-color: #1e1e3f;
 	color-scheme: dark;
 }
@@ -127,7 +132,7 @@ input[type="date"] {
 }
 .box-checkbox:hover,
 .box-checkbox:has(> input:checked) {
-	background-color: #35356e;
+	background-color: #1c4e6d;
 }
 
 .box-checkbox input {
