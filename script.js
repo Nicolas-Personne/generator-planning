@@ -343,7 +343,7 @@ async function generatePDF(e) {
 									newDate.getMonth() !== choosenDate.getMonth() + monthAdd;
 
 								if (changingMonth) {
-									indexOfRow += 63;
+									indexOfRow += 59;
 									indexOfDate = 1;
 									monthHasChanged++;
 									monthAdd++;
