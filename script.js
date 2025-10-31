@@ -16,6 +16,10 @@ const includedClasses = []; // stocke les classes sélectionnées par l'utilisat
 let intervenantsArray = {}; // dictionnaire des enseignants
 let subjectArray = {}; // dictionnaire des matières
 
+let today = new Date();
+
+dateInput.value =
+	today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate();
 // Tableaux utilitaires
 const months = [
 	"jan",
@@ -330,7 +334,6 @@ async function generatePDF(e) {
 					let indexOfDate = item.indexOf(choosenSerial);
 					if (indexOfDate !== -1) {
 						includedClasses.map((classe) => {
-							console.log("Démarrage : ", classe.classe);
 							let indexOfRow = index;
 							indexOfDate = item.indexOf(choosenSerial);
 							let j = 0;
@@ -349,7 +352,6 @@ async function generatePDF(e) {
 									monthAdd++;
 									tempFlag = true;
 								}
-								console.log(indexOfRow);
 								if (tempFlag && monthHasChanged === 1) {
 									j = 0;
 									tempFlag = false;
@@ -407,7 +409,6 @@ async function generatePDF(e) {
 								j++;
 							}
 						});
-						console.log(fullDataArray);
 						// Génère un PDF par classe
 						for (const classe in fullDataArray) {
 							await fillPlanning(
