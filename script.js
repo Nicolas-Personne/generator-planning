@@ -269,6 +269,7 @@ async function generatePDF(e) {
 	const classesInput = document.querySelectorAll("input[name='classes[]'");
 
 	let j = 2;
+
 	for (let i = 0; i < classesInput.length; i++) {
 		if (classesInput[i].checked) {
 			includedClasses.push({ classe: classesInput[i].value, interval: j });
@@ -330,12 +331,15 @@ async function generatePDF(e) {
 				let startDate = "";
 				let endDate = "";
 
-				jsonData.map(async (item, index) => {
-					let indexOfDate = item.indexOf(choosenSerial);
+				for (index = 0; index <= jsonData.length - 1; index++) {
+					let indexOfDate = jsonData[index].indexOf(choosenSerial);
 					if (indexOfDate !== -1) {
+						console.log(includedClasses);
+
 						includedClasses.map((classe) => {
+							console.log("je suis la");
 							let indexOfRow = index;
-							indexOfDate = item.indexOf(choosenSerial);
+							indexOfDate = jsonData[index].indexOf(choosenSerial);
 							let j = 0;
 							let monthHasChanged = 0;
 							let tempFlag = false;
@@ -409,17 +413,12 @@ async function generatePDF(e) {
 								j++;
 							}
 						});
-						// Génère un PDF par classe
-						for (const classe in fullDataArray) {
-							await fillPlanning(
-								fullDataArray[classe],
-								startDate,
-								endDate,
-								classe
-							);
-						}
 					}
-				});
+				}
+				// Génère un PDF par classe
+				for (const classe in fullDataArray) {
+					fillPlanning(fullDataArray[classe], startDate, endDate, classe);
+				}
 			}
 		});
 	};
