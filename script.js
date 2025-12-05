@@ -314,7 +314,7 @@ async function generatePDF(e) {
 		});
 
 		// Chargement des intervenants et du planning
-		workbook.SheetNames.map((sheet) => {
+		workbook.SheetNames.map(async (sheet) => {
 			if (sheet === "Data") {
 				const worksheet = workbook.Sheets[sheet];
 				const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
@@ -416,8 +416,10 @@ async function generatePDF(e) {
 					}
 				}
 				// Génère un PDF par classe
+				console.log(fullDataArray);
+
 				for (const classe in fullDataArray) {
-					fillPlanning(fullDataArray[classe], startDate, endDate, classe);
+					await fillPlanning(fullDataArray[classe], startDate, endDate, classe);
 				}
 			}
 		});
