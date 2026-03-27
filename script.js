@@ -334,10 +334,7 @@ async function generatePDF(e) {
 				for (index = 0; index <= jsonData.length - 1; index++) {
 					let indexOfDate = jsonData[index].indexOf(choosenSerial);
 					if (indexOfDate !== -1) {
-						console.log(includedClasses);
-
 						includedClasses.map((classe) => {
-							console.log("je suis la");
 							let indexOfRow = index;
 							indexOfDate = jsonData[index].indexOf(choosenSerial);
 							let j = 0;
@@ -350,7 +347,7 @@ async function generatePDF(e) {
 									newDate.getMonth() !== choosenDate.getMonth() + monthAdd;
 
 								if (changingMonth) {
-									indexOfRow += 59;
+									indexOfRow += 58;
 									indexOfDate = 1;
 									monthHasChanged++;
 									monthAdd++;
@@ -360,24 +357,25 @@ async function generatePDF(e) {
 									j = 0;
 									tempFlag = false;
 								}
+								console.log(indexOfRow);
 
 								// Formatage des dates
 								if (i === 0) {
 									startDate = `${String(newDate.getDate()).padStart(
 										2,
-										"0"
+										"0",
 									)}-${String(newDate.getMonth() + 1).padStart(
 										2,
-										"0"
+										"0",
 									)}-${newDate.getFullYear()}`;
 								}
 								if (i === 4) {
 									endDate = `${String(newDate.getDate()).padStart(
 										2,
-										"0"
+										"0",
 									)}-${String(newDate.getMonth() + 1).padStart(
 										2,
-										"0"
+										"0",
 									)}-${newDate.getFullYear()}`;
 								}
 
@@ -416,7 +414,6 @@ async function generatePDF(e) {
 					}
 				}
 				// Génère un PDF par classe
-				console.log(fullDataArray);
 
 				for (const classe in fullDataArray) {
 					await fillPlanning(fullDataArray[classe], startDate, endDate, classe);
