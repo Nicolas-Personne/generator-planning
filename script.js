@@ -283,7 +283,7 @@ async function generatePDF(e) {
 	}
 	const uploadedFile = file.files[0];
 	if (!uploadedFile) {
-		fileError.innerText = "Ajouter votre planning excel (VERSION 2025)";
+		fileError.innerText = "Ajouter votre planning excel";
 		return;
 	}
 
@@ -293,8 +293,11 @@ async function generatePDF(e) {
 		const workbook = XLSX.read(data, { type: "array" });
 		// Chargement des matières
 
-		if (!workbook.SheetNames.includes("Planning_2025_2026")) {
-			fileError.innerText = "Il manque la feuille 'Planning_2025_2026";
+		if (
+			!workbook.SheetNames.includes("Planning_2025_2026") &&
+			!workbook.SheetNames.includes("Planning_2026_2027")
+		) {
+			fileError.innerText = "Il manque la feuille 'Planning";
 			return;
 		}
 		workbook.SheetNames.map((sheet) => {
@@ -304,6 +307,7 @@ async function generatePDF(e) {
 						? "_" + item.classe.split(" ")[1].toUpperCase()
 						: ""
 				}`;
+
 				if (sheet === sheetName) {
 					const worksheet = workbook.Sheets[sheet];
 					const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
@@ -320,7 +324,7 @@ async function generatePDF(e) {
 				const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 				loadInter(jsonData);
 			}
-			if (sheet === "Planning_2025_2026") {
+			if (sheet === "Planning_2025_2026" || sheet === "Planning_2026_2027") {
 				const worksheet = workbook.Sheets[sheet];
 				const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
@@ -341,13 +345,15 @@ async function generatePDF(e) {
 							let monthHasChanged = 0;
 							let tempFlag = false;
 							let monthAdd = 0;
+							console.log("Date", indexOfDate);
+
 							for (let i = 0; i < 5; i++) {
 								let newDate = new Date(choosenDate.getTime() + i * 86400000);
 								let changingMonth =
 									newDate.getMonth() !== choosenDate.getMonth() + monthAdd;
 
 								if (changingMonth) {
-									indexOfRow += 58;
+									indexOfRow += 64;
 									indexOfDate = 1;
 									monthHasChanged++;
 									monthAdd++;
@@ -357,7 +363,6 @@ async function generatePDF(e) {
 									j = 0;
 									tempFlag = false;
 								}
-								console.log(indexOfRow);
 
 								// Formatage des dates
 								if (i === 0) {
@@ -378,7 +383,9 @@ async function generatePDF(e) {
 										"0",
 									)}-${newDate.getFullYear()}`;
 								}
-
+								console.log(subjectArray[classe.classe]);
+								console.log(jsonData[indexOfRow + classe.interval + 1]);
+								console.log(indexOfDate + j);
 								fullDataArray[classe.classe] = {
 									...fullDataArray[classe.classe],
 									[`${newDate.getDate()}-${months[newDate.getMonth()]}`]: {
